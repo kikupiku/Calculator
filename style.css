@@ -1,0 +1,118 @@
+* {
+margin: 0;
+padding: 0;
+}
+
+body {
+  background: #6961052b;
+}
+
+h1 {
+  font-size: 40px;
+  font-weight: bolder;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin-top: 40px;
+  margin-bottom: 40px;
+}
+
+@font-face {
+font-family: 'loopy-regular-webfont';
+src:  url("fonts/loopy-regular-webfont.woff")  format('woff'),
+      url("fonts/loopy-regular-webfont.woff2")  format('woff2');
+}
+
+.display {
+  background-color: #3c3c3c;
+  color: #efeaea;
+  border: 1px solid black;
+  border-radius: 5px;
+  width: 250px;
+  height: 60px;
+  margin: 20px auto;
+  display: block;
+  vertical-align: center;
+  align: center;
+  font-family: 'loopy-regular-webfont';
+  font-size: 48px;
+  text-align: right;
+  line-height: 55px;
+  padding-right: 10px;
+}
+
+.calcBody {
+  width: 320px;
+  height: 480px;
+  border: 1px solid black;
+  border-radius: 5px;
+  background-color: #6f6d6d;
+  z-index: 1;
+  display: block;
+  margin: 0 auto;
+  box-shadow: 0 3px 3px black;
+}
+
+.keyboard {
+  display: block;
+  margin: 0 auto;
+  /* border: 1px solid red; */
+  width: 260px;
+}
+
+.button {
+  display: inline-block;
+  border-radius: 5px;
+  border: 1px solid black;
+  text-align: center;
+  margin-bottom: 5px;
+  z-index: 2;
+  font-family: Arial, sans-serif;
+  font-size: 20px;
+  transition: all 0.1s linear;
+  box-shadow: inset 0px 0px 32px -12px;
+
+}
+
+.button:active {
+  box-shadow: inset 0px 0px 38px -12px;
+  transform: translateY(2px);
+}
+
+.button:focus {
+  outline: none;
+}
+
+#ac {
+  height: 60px;
+  width: 128px;
+  background-color: #d7da27;
+}
+
+#delete, #divide, #seven, #eight, #nine, #multiply, #four, #five, #six, #add {
+  height: 60px;
+  width: 62px;
+  background-color: #a1ab41;
+}
+
+#equals {
+  width: 62px;
+  height: 130px;
+  background-color: #3f9442;
+}
+
+#one, #two, #three {
+  height: 62px;
+  width: 62px;
+  position: relative;
+  bottom: 33px;
+  background-color: #a1ab41;
+
+}
+
+#dot, #zero, #minus {
+  height: 62px;
+  width: 62px;
+  position: relative;
+  bottom: 67px;
+  background-color: #a1ab41;
+}
