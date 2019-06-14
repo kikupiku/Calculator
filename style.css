@@ -31,13 +31,12 @@ src:  url("fonts/loopy-regular-webfont.woff")  format('woff'),
   height: 60px;
   margin: 20px auto;
   display: block;
-  vertical-align: center;
-  align: center;
   font-family: 'loopy-regular-webfont';
   font-size: 48px;
   text-align: right;
   line-height: 55px;
-  padding-right: 10px;
+  padding-right: 5px;
+  padding-left: 5px;
 }
 
 .calcBody {
