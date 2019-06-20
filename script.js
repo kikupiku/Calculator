@@ -16,11 +16,10 @@ function playSound(argument) {
   press.play();
 }
 
-function setNewState(message, displayContent, newOutput) {
+function setNewState(message, displayContent) {
   friendlyMessage.textContent = message;
   display.innerHTML = displayContent;
-  output = newOutput;
-
+  output = (display.innerHTML === "0") ? "" : displayContent;
   display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): display.innerHTML;
 }
 
@@ -28,32 +27,30 @@ keyboard.addEventListener('click', (e) => {
   if (e.target.classList.contains('button')) {
     switch (e.target.innerHTML) {
     case 'AC':
-      setNewState("OK, let's start over.", "0", "");
-
+      setNewState("OK, let's start over.", "0");
       break;
     case '÷':
-      setNewState("", (output + '/'), (output + '/'))
+      setNewState("", (output + '/'))
       break;
     case '×':
-      setNewState("", (output + '*'), (output + '*'));
+      setNewState("", (output + '*'));
       break;
     case '⌫':
       let howLong = output;
       if (howLong.length === 1) {
-        setNewState("A very good place to start...", '0', '');
+        setNewState("A very good place to start...", '0');
       } else {
         let oldOutput = output;
         let cutOutput = oldOutput.substring(0, (oldOutput.length - 1));
-        setNewState("Let's take that back.", cutOutput, cutOutput);
+        setNewState("Let's take that back.", cutOutput);
       }
       break;
     case '=':
       if (output.includes("/0")) {
-        setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0", "");
+        setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0");
       } else {
-        let oldOutput = output;
-        let newOutput = eval(oldOutput);
-        setNewState("", newOutput, newOutput);
+        let newOutput = eval(output).toString();
+        setNewState("", newOutput);
       }
       break;
     case '.':
@@ -68,13 +65,13 @@ keyboard.addEventListener('click', (e) => {
       }
       let equationSidesArray = oldOutput.split('+');
       if (equationSidesArray[equationSidesArray.length - 1].includes('.')) {
-        setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput, oldOutput);
+        setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput);
       } else {
-        setNewState('I guess this dot can slip by. But pay heed, you may enter no more dots for this number.', (oldOutput + '.'), (oldOutput + '.'));
+        setNewState('I guess this dot can slip by. But pay heed, you may enter no more dots for this number.', (oldOutput + '.'));
       }
       break;
     default:
-      setNewState("", (output + e.target.innerHTML), (output + e.target.innerHTML));
+      setNewState("", (output + e.target.innerHTML));
       break;
     }
   }
@@ -85,107 +82,62 @@ function logKey(e) {
   key = `${e.code}`;
   console.log(key);
     switch (key) {
-    case 'Numpad0':
-    case 'Digit0':
-    case 'Numpad1':
-    case 'Digit1':
-    case 'Numpad2':
-    case 'Digit2':
-    case 'Numpad3':
-    case 'Digit3':
-    case 'Numpad4':
-    case 'Digit4':
-    case 'Numpad5':
-    case 'Digit5':
-    case 'Numpad6':
-    case 'Digit6':
-    case 'Numpad7':
-    case 'Digit7':
-    case 'Numpad8':
-    case 'Digit8':
-    case 'Numpad9':
-    case 'Digit9':
-      friendlyMessage.textContent = "";
+    case 'Numpad0': case 'Digit0': case 'Numpad1': case 'Digit1':
+    case 'Numpad2': case 'Digit2': case 'Numpad3': case 'Digit3':
+    case 'Numpad4': case 'Digit4': case 'Numpad5': case 'Digit5':
+    case 'Numpad6': case 'Digit6': case 'Numpad7': case 'Digit7':
+    case 'Numpad8': case 'Digit8': case 'Numpad9': case 'Digit9':
       let numbah = key.split("").pop();
-      console.log(numbah);
-      output += numbah;
-      display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): output;
+      setNewState("", (output + numbah));
       break;
     case 'NumpadAdd':
-      friendlyMessage.textContent = "";
-      output += '+';
-      display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): output;
+      setNewState("", (output + '+'));
       break;
-    case 'NumpadSubtract':
-    case 'Minus':
-      friendlyMessage.textContent = "";
-      output += '-';
-      display.innerHTML = output;
+    case 'NumpadSubtract': case 'Minus':
+      setNewState("", (output + '-'));
       break;
-    case 'NumpadDivide':
-      friendlyMessage.textContent = "";
-      output += '/';
-      display.innerHTML = output;
+    case 'NumpadDivide': case 'Slash':
+      setNewState("", (output + '/'));
       break;
     case 'NumpadMultiply':
-      friendlyMessage.textContent = "";
-      output = output + '*';
-      display.innerHTML = output;
+      setNewState("", (output + '*'));
       break;
     case 'Backspace':
       let howLong = display.innerHTML;
       if (howLong.length === 1) {
-        friendlyMessage.textContent = "Let's just start from the very beginning!";
-        display.innerHTML = "0";
-        output = "";
+        setNewState("Let's just start from the very beginning!", "0")
       } else {
-        friendlyMessage.textContent = "Oopsie, wrong number!";
         let less = output.substring(0, (output.length -1));
-        display.innerHTML = less;
-        output = display.innerHTML;
-        display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): output;
+        setNewState("Oopsie, a typo!", less);
       }
       break;
-    case 'NumpadEnter':
-    case 'Enter':
-      let isItDormammu = display.innerHTML;
-      if (isItDormammu.includes("/0")) {
-        friendlyMessage.textContent = "I see you trying to destroy the world. Not today, Dormammu. Not today."
-        display.innerHTML = "0";
-        output = "";
+    case 'NumpadEnter': case 'Enter':
+      let dormammuOrNot = output;
+      if (dormammuOrNot.includes("/0")) {
+        setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0");
       } else {
-        friendlyMessage.textContent = "";
-        display.innerHTML = eval(output);
-        output = display.innerHTML;
-        display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): output;
+        let newOutput = eval(output).toString();
+        setNewState("", newOutput);
       }
       break;
-    case 'NumpadDecimal':
-    case 'Period':
-      friendlyMessage.textContent = "";
-      if (display.innerHTML.includes('.') && !display.innerHTML.includes("+") && !display.innerHTML.includes("-") && !display.innerHTML.includes("*") && !display.innerHTML.includes("/")) {
-        ;
-        friendlyMessage.textContent = 'No more dots on the left side of the equation, thank you.';
-      } else if (display.innerHTML.includes('.') && (display.innerHTML.includes("+") || display.innerHTML.includes("-") || display.innerHTML.includes("*") || display.innerHTML.includes("/"))) {
-        equationSides = display.innerHTML.replace('-', '+').replace('*', '+').replace('/', '+').split('+');
-        for (let i = 1; i < equationSides.length; i++) {
-          if (equationSides[i].includes('.')) {
-            friendlyMessage.textContent = 'We have enough dots for now. If we need any more dots, I call.';
-            ;
-          } else {
-            display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): display.innerHTML + '.';
-            output = display.innerHTML;
-            friendlyMessage.textContent = 'I guess this dot can slip by. But pay heed, you may enter no more dots for this number.';
-          }
+    case 'NumpadDecimal': case 'Period':
+      let oldOutput = output;
+      let subbedSymbolsOutput = '';
+      for (let i = 0; i < oldOutput.length; i++) {
+        if (['-', '*', '/'].includes(oldOutput[i])) {
+          subbedSymbolsOutput += '+';
+        } else {
+          subbedSymbolsOutput += oldOutput[i];
         }
+      }
+      let equationSidesArray = oldOutput.split('+');
+      if (equationSidesArray[equationSidesArray.length - 1].includes('.')) {
+        setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput);
       } else {
-        display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): display.innerHTML + '.';
-        output = display.innerHTML;
+        setNewState('I guess this dot can slip by. But pay heed, you may enter no more dots for this number.', (oldOutput + '.'));
       }
       break;
     default:
       break;
     }
   }
-
-// TODO fix the too many numbers display bug, and assign new output variable names
