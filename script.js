@@ -5,6 +5,9 @@ let friendlyMessage = document.querySelector('h2');
 let display = document.querySelector('.display');
 let keyboard = document.querySelector('.keyboard');
 
+keyboard.addEventListener('click', operate);
+document.addEventListener('keydown', operate);
+
 document.querySelectorAll('button').forEach((button) => {
   button.addEventListener('mousedown', playSound);
 });
@@ -23,95 +26,53 @@ function setNewState(message, displayContent) {
   display.innerHTML = (output.length > 12) ? (output.substring(0, 10) + "…"): display.innerHTML;
 }
 
-keyboard.addEventListener('click', (e) => {
-  if (e.target.classList.contains('button')) {
-    switch (e.target.innerHTML) {
-    case 'AC':
-      setNewState("OK, let's start over.", "0");
-      break;
-    case '÷':
-      setNewState("", (output + '/'))
-      break;
-    case '×':
-      setNewState("", (output + '*'));
-      break;
-    case '⌫':
-      let howLong = output;
-      if (howLong.length === 1) {
-        setNewState("A very good place to start...", '0');
-      } else {
-        let oldOutput = output;
-        let cutOutput = oldOutput.substring(0, (oldOutput.length - 1));
-        setNewState("Let's take that back.", cutOutput);
-      }
-      break;
-    case '=':
-      if (output.includes("/0")) {
-        setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0");
-      } else {
-        let newOutput = eval(output).toString();
-        setNewState("", newOutput);
-      }
-      break;
-    case '.':
-      let oldOutput = output;
-      let subbedSymbolsOutput = '';
-      for (let i = 0; i < oldOutput.length; i++) {
-        if (['-', '*', '/'].includes(oldOutput[i])) {
-          subbedSymbolsOutput += '+';
-        } else {
-          subbedSymbolsOutput += oldOutput[i];
-        }
-      }
-      let equationSidesArray = oldOutput.split('+');
-      if (equationSidesArray[equationSidesArray.length - 1].includes('.')) {
-        setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput);
-      } else {
-        setNewState('I guess this dot can slip by. But pay heed, you may enter no more dots for this number.', (oldOutput + '.'));
-      }
-      break;
-    default:
-      setNewState("", (output + e.target.innerHTML));
-      break;
-    }
-  }
-});
+function operate(e) {
+  e.preventDefault();           // don't know why but it prevents weird behavior when combining keyboard and mouse clicks
+  let key;
 
-document.addEventListener('keydown', logKey);
-function logKey(e) {
-  key = `${e.code}`;
-  console.log(key);
+  if (e.code) {
+    key = `${e.code}`
+  } else if (e.target.classList.contains('button')){
+    key = e.target.innerHTML
+  }
+
+  if (key) {
     switch (key) {
-    case 'Numpad0': case 'Digit0': case 'Numpad1': case 'Digit1':
-    case 'Numpad2': case 'Digit2': case 'Numpad3': case 'Digit3':
-    case 'Numpad4': case 'Digit4': case 'Numpad5': case 'Digit5':
-    case 'Numpad6': case 'Digit6': case 'Numpad7': case 'Digit7':
-    case 'Numpad8': case 'Digit8': case 'Numpad9': case 'Digit9':
+    case 'Numpad0': case 'Digit0': case '0':
+    case 'Numpad1': case 'Digit1': case '1':
+    case 'Numpad2': case 'Digit2': case '2':
+    case 'Numpad3': case 'Digit3': case '3':
+    case 'Numpad4': case 'Digit4': case '4':
+    case 'Numpad5': case 'Digit5': case '5':
+    case 'Numpad6': case 'Digit6': case '6':
+    case 'Numpad7': case 'Digit7': case '7':
+    case 'Numpad8': case 'Digit8': case '8':
+    case 'Numpad9': case 'Digit9': case '9':
       let numbah = key.split("").pop();
       setNewState("", (output + numbah));
       break;
-    case 'NumpadAdd':
+    case 'NumpadAdd': case '+':
       setNewState("", (output + '+'));
       break;
-    case 'NumpadSubtract': case 'Minus':
+    case 'NumpadSubtract': case 'Minus': case '-':
       setNewState("", (output + '-'));
       break;
-    case 'NumpadDivide': case 'Slash':
+    case 'NumpadDivide': case 'Slash': case '÷':
       setNewState("", (output + '/'));
       break;
-    case 'NumpadMultiply':
+    case 'NumpadMultiply': case '×':
       setNewState("", (output + '*'));
       break;
-    case 'Backspace':
-      let howLong = display.innerHTML;
+    case 'Backspace': case '⌫':
+      let howLong = output;
       if (howLong.length === 1) {
         setNewState("Let's just start from the very beginning!", "0")
       } else {
-        let less = output.substring(0, (output.length -1));
+        let less = output.substring(0, (output.length - 1));
         setNewState("Oopsie, a typo!", less);
       }
       break;
-    case 'NumpadEnter': case 'Enter':
+    case 'NumpadEnter': case 'Enter': case '=':
       let dormammuOrNot = output;
       if (dormammuOrNot.includes("/0")) {
         setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0");
@@ -120,7 +81,7 @@ function logKey(e) {
         setNewState("", newOutput);
       }
       break;
-    case 'NumpadDecimal': case 'Period':
+    case 'NumpadDecimal': case 'Period': case '.':
       let oldOutput = output;
       let subbedSymbolsOutput = '';
       for (let i = 0; i < oldOutput.length; i++) {
@@ -134,10 +95,12 @@ function logKey(e) {
       if (equationSidesArray[equationSidesArray.length - 1].includes('.')) {
         setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput);
       } else {
-        setNewState('I guess this dot can slip by. But pay heed, you may enter no more dots for this number.', (oldOutput + '.'));
+        setNewState('This dot can slip by. But you may enter no more dots for this number.', (oldOutput + '.'));
       }
       break;
-    default:
+    case 'AC': case 'Escape':
+      setNewState("OK, let's start over.", "0");
       break;
     }
   }
+}
