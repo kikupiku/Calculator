@@ -49,23 +49,24 @@ function operate(e) {
     case 'Numpad8': case 'Digit8': case '8':
     case 'Numpad9': case 'Digit9': case '9':
       let numbah = key.split("").pop();
-      setNewState("", (output + numbah));
+      setNewState("You know that I am called the count, because I really love to...", (output + numbah));
       break;
     case 'NumpadAdd': case '+':
-      setNewState("", (output + '+'));
+      setNewState("Plus...", (output + '+'));
       break;
     case 'NumpadSubtract': case 'Minus': case '-':
-      setNewState("", (output + '-'));
+      setNewState("Minus...", (output + '-'));
       break;
     case 'NumpadDivide': case 'Slash': case '÷':
-      setNewState("", (output + '/'));
+      setNewState("Divided by...", (output + '/'));
       break;
     case 'NumpadMultiply': case '×':
-      setNewState("", (output + '*'));
+      setNewState("Times...", (output + '*'));
       break;
     case 'Backspace': case '⌫':
-      let howLong = output;
-      if (howLong.length === 1) {
+      let howLong = display.innerHTML;
+      if (howLong.length === 1 || howLong === "0") {
+        console.log(output);
         setNewState("Let's just start from the very beginning!", "0")
       } else {
         let less = output.substring(0, (output.length - 1));
@@ -75,10 +76,10 @@ function operate(e) {
     case 'NumpadEnter': case 'Enter': case '=':
       let dormammuOrNot = output;
       if (dormammuOrNot.includes("/0")) {
-        setNewState("I see you trying to destroy the world. Not today, Dormammu. Not today.", "0");
+        setNewState("Nope nope nope nope nope. Non sequitur.", "0");
       } else {
         let newOutput = eval(output).toString();
-        setNewState("", newOutput);
+        setNewState("Roger roger. Your result is...", newOutput);
       }
       break;
     case 'NumpadDecimal': case 'Period': case '.':
@@ -93,7 +94,7 @@ function operate(e) {
       }
       let equationSidesArray = oldOutput.split('+');
       if (equationSidesArray[equationSidesArray.length - 1].includes('.')) {
-        setNewState('We have enough dots for now. If we need any more dots, I call.', oldOutput);
+        setNewState('Told ya, we have enough dots for now. If we need any more dots, I call.', oldOutput);
       } else {
         setNewState('This dot can slip by. But you may enter no more dots for this number.', (oldOutput + '.'));
       }
