@@ -27,13 +27,14 @@ function setNewState(message, displayContent) {
 }
 
 function operate(e) {
-  e.preventDefault();           // don't know why but it prevents weird behavior when combining keyboard and mouse clicks
+  e.preventDefault();    // don't know why but it prevents weird behavior when combining keyboard and mouse clicks
   let key;
 
   if (e.code) {
-    key = `${e.code}`
-  } else if (e.target.classList.contains('button')){
-    key = e.target.innerHTML
+    key = `${e.code}`;
+    console.log(key);
+  } else if (e.target.classList.contains('button')) {
+    key = e.target.innerHTML;
   }
 
   if (key) {
@@ -60,7 +61,7 @@ function operate(e) {
     case 'NumpadDivide': case 'Slash': case '÷':
       setNewState("Divided by...", (output + '/'));
       break;
-    case 'NumpadMultiply': case '×':
+    case 'NumpadMultiply': case '×': case ('ShiftLeft' && 'Digit8'):
       setNewState("Times...", (output + '*'));
       break;
     case 'Backspace': case '⌫':
