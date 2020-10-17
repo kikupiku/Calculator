@@ -6,4 +6,4 @@ The project covers building basic javascript functions and DOM manipulation so t
 
 The project is available live [HERE](https://kikupiku.github.io/Calculator/)
 
-![gif of the project in action](https://res.cloudinary.com/kikupiku/image/upload/v1597275130/project-gifs/calculator_agas08.gif)
+![gif of the project in action](https://res.cloudinary.com/kikupiku/image/upload/v1602936447/project-gifs/calculator_fcoqlz.gif)
